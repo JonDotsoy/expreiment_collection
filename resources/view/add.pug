@@ -1,0 +1,40 @@
+extends layout
+
+
+block body
+
+  .body-container.formadd-container
+    header
+      h1.formadd-title Add Lib
+      
+      form
+
+        div.formadd-content-input.formadd-content-input-title
+          div.formadd-input-content
+            label.formadd-label Nombre
+            input.formadd-input(placeholder='Ex. lodash')
+
+        div.formadd-content-input.formadd-content-input-version
+          div.formadd-input-content
+            label.formadd-label Version
+            input.formadd-input(placeholder='Ex. ^4.1.1')
+
+        div.formadd-content-input.formadd-content-input-tags
+          div.formadd-input-content
+            label.formadd-label Tags
+            input.formadd-input(placeholder='Ex. object, util, ...')
+
+        div.formadd-content-input.formadd-content-input-desc
+          div.formadd-input-content
+            label.formadd-label Description
+            textarea.formadd-input(placeholder='Lodash modular utilities.')
+
+        div.formadd-content-input.formadd-content-input-keyfrom
+          div.formadd-input-content
+            label.formadd-label key from
+            input.formadd-input(placeholder='Ex. npm')
+
+        div.btn-collection
+          a(href='/').btn Cancel
+          button.btn Save
+

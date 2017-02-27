@@ -1,0 +1,11 @@
+version: "2"
+
+
+services:
+  redis:
+    image: redis:3.2.8-alpine
+    container_name: collection_redis
+    ports:
+      - "6379:6379"
+
+
