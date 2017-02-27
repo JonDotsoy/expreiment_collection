@@ -5,36 +5,45 @@ block body
 
   .body-container.formadd-container
     header
-      h1.formadd-title Add Lib
-      
-      form
+      h1.formadd-title= customTitle || 'Add Lib'
 
-        div.formadd-content-input.formadd-content-input-title
-          div.formadd-input-content
-            label.formadd-label Nombre
-            input.formadd-input(placeholder='Ex. lodash')
+      if err && err.ok === false
+        each erri in err.errors
+          div.alert-notification.alert-error= erri.message
 
-        div.formadd-content-input.formadd-content-input-version
-          div.formadd-input-content
-            label.formadd-label Version
-            input.formadd-input(placeholder='Ex. ^4.1.1')
+    form(method='POST')
 
-        div.formadd-content-input.formadd-content-input-tags
-          div.formadd-input-content
-            label.formadd-label Tags
-            input.formadd-input(placeholder='Ex. object, util, ...')
+      div.formadd-content-input.formadd-content-input-title
+        div.formadd-input-content
+          label.formadd-label Name
+          input.formadd-input(name='name', placeholder='Ex. lodash', value=body.name)
 
-        div.formadd-content-input.formadd-content-input-desc
-          div.formadd-input-content
-            label.formadd-label Description
-            textarea.formadd-input(placeholder='Lodash modular utilities.')
+      div.formadd-content-input.formadd-content-input-version
+        div.formadd-input-content
+          label.formadd-label Version
+          input(name='version' placeholder='Ex. ^4.1.1', value=body.version).formadd-input
 
-        div.formadd-content-input.formadd-content-input-keyfrom
-          div.formadd-input-content
-            label.formadd-label key from
-            input.formadd-input(placeholder='Ex. npm')
+      div.formadd-content-input.formadd-content-input-url
+        div.formadd-input-content
+          label.formadd-label Link
+          input(name='url' placeholder='Ex. https://github.com/myProject/obn#readme', value=body.url).formadd-input
 
-        div.btn-collection
-          a(href='/').btn Cancel
-          button.btn Save
+      div.formadd-content-input.formadd-content-input-tags
+        div.formadd-input-content
+          label.formadd-label Tags
+          input(name='tags' placeholder='Ex. object, util, ...', value=body.tags).formadd-input
+
+      div.formadd-content-input.formadd-content-input-desc
+        div.formadd-input-content
+          label.formadd-label Description
+          textarea(name='description' placeholder='Lodash modular utilities.', value=body.description).formadd-input
+
+      div.formadd-content-input.formadd-content-input-keyfrom
+        div.formadd-input-content
+          label.formadd-label key from
+          input(name='keyfrom', value=body.keyfrom||'npm', placeholder='Ex. npm').formadd-input
+
+      div.btn-collection.btn-collection-right
+        a(href='/').btn Cancel
+        button(type='submit').btn Save
 

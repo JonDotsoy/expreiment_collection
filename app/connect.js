@@ -9,7 +9,7 @@ class Connect {
       port
     })
 
-    this.con.on('error', console.log)
+    this.con.on('error', console.error)
   }
 
   get connection () {
@@ -19,14 +19,20 @@ class Connect {
   async get (key) {
     return new Promise((resolve, reject) => {
       this.con.get(key, (err, result) => {
-        if (err) { reject(err) } else { resolve(result) }
+        if (err) { reject(err) } else {
+          try {
+            resolve( JSON.parse(result) )
+          } catch (ex) {
+            resolve( result )
+          }
+        }
       })
     })
   }
 
   async set (key, value) {
     return new Promise((resolve, reject) => {
-      this.con.set(key, value, (err, result) => {
+      this.con.set(key, JSON.stringify(value), (err, result) => {
         if (err) { reject(err) } else { resolve(result === 'OK') }
       })
     })
@@ -51,16 +57,17 @@ class Connect {
   async has (key) {
     return new Promise((resolve, reject) => {
       this.con.exists(key, (err, result) => {
-        if (err) { reject(err) } else { resolve(result) }
+        if (err) { reject(err) } else { resolve(result===1) }
       })
     })
   }
 }
 
 function shim () {
-  if (!global.connect && global.connect instanceof Connect) {
+  if (!global.connect) {
     // Local instance to connect
     global.connect = new Connect({host: config.db.host, port: config.db.port})
+    // console.log('globalize connect')
   }
 }
 

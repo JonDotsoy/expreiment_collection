@@ -3,32 +3,27 @@ const cluster = require('cluster')
 const config = require('../config')
 const express = require('express')
 
+require('../app/connect').shim()
+
 const processSend = function () {
   process && process.send && process.send.apply(process, arguments)
 }
 
 const app = express()
 
+app.locals.body = {}
 
 app.set('view engine', 'pug')
 app.set('views', 'resources/view')
 
 app.use(express.static('www'))
-app.use('/img/icons',express.static('resources/img/icons'))
+app.use('/img/icons', express.static('resources/img/icons'))
 
+const homeCtrl = require('../app/controller/collection')
 
-app.get( '/' , (req, res) => {
-  res.render( 'index' )
-})
-
-app.get('/add', (req, res) => {
-  res.render( 'add' )
-})
-
+app.use(homeCtrl.path, homeCtrl.route)
 
 // API
-
-
 
 const toHostname = (address) => address === '::'
   ? 'localhost'
@@ -36,14 +31,12 @@ const toHostname = (address) => address === '::'
     ? 'localhost'
     : address
 
-
-const server = app.listen(config.port || 3000, config.address|| '::', () => {
-
+const server = app.listen((config.port || 3000, config.address || '::'), () => {
   const {port, address} = server.address()
   const defaultURL = url.format({
     protocol: 'http',
     port,
-    hostname: toHostname(address),
+    hostname: toHostname(address)
   })
 
   console.info('open server Open %s', defaultURL)
@@ -52,9 +45,8 @@ const server = app.listen(config.port || 3000, config.address|| '::', () => {
     type: 'LISTEN_SERVER',
     port,
     address,
-    defaultURL,
+    defaultURL
   })
-
 })
 
 if (cluster.isWorker) {

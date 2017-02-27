@@ -23,7 +23,7 @@ async function newFork () {
 
     cluster.setupMaster({
       exec: 'bootstrap/serve.js',
-      silent: true
+      silent: !true
     })
 
     const worker = cluster.fork()
@@ -39,6 +39,13 @@ async function newFork () {
 task('up-serve', ['down-serve'], async () => {
   const {worker, defaultURL: _defaultURL} = await newFork()
 
+  worker.on('exit', () => {
+    defaultURL = null
+    currentWorker = null
+
+    gutil.log(chalk.red('worker is closing.'))
+  })
+
   defaultURL = _defaultURL
 
   currentWorker = worker
@@ -48,17 +55,8 @@ task('up-serve', ['down-serve'], async () => {
 
 task('down-serve', (done) => {
   if (currentWorker) {
-    currentWorker.on('message', ({type}) => {
-      if (type === 'CLOSING_WORKER') {
-        defaultURL = null
-        currentWorker = null
-        done()
-      }
-    })
-
-    currentWorker.send({
-      type: 'CLOSE_SERVER'
-    })
+    currentWorker.on('exit', () => done() )
+    currentWorker.kill()
   } else {
     done()
   }

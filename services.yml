@@ -2,6 +2,18 @@ version: "2"
 
 
 services:
+  collection:
+    build: .
+    image: "jondotsoy/collection:1"
+    container_name: collection
+    environment:
+      - "PORT=3000"
+      - "DB_HOST=db"
+    links:
+      - "redis:db"
+    ports:
+      - "3000"
+
   redis:
     image: redis:3.2.8-alpine
     container_name: collection_redis

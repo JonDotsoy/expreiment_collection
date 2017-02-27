@@ -1,0 +1,24 @@
+extends layout
+
+
+block body
+
+  .body-container.preview-container
+
+    a(href='/').preview-back [volver]
+
+    header
+      .preview-title
+        a(href='#').content-title= body.name
+        span.preview-version= body.version
+        a(href='/edit/'+body.name).editlink Edit
+        //- if body.version
+          span.preview-version= body.version
+      
+      .preview-info
+        .preview-tags= body.tags
+
+      .preview-description
+        p= body.description
+
+
